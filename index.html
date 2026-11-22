@@ -123,10 +123,10 @@ const og=(lab,items)=>{const g=document.createElement('optgroup');g.label=lab;it
 og('Regions',AREAS.map(a=>[a[0],a[1]]));
 ['Northern Metropolitan','Western Metropolitan',...regions.filter(r=>!RS[r])].forEach(r=>og((RS[r]||r)+' districts',dists.filter(d=>J.districts[d].r==r).map(d=>['d-'+slug(d),d])));
 $('nv').textContent=fmt(V.length); $('asat').textContent=J.meta.asat; $('nc').textContent=fmt(V.filter(x=>x.g=='c').length);
-let st={area:'nmwm',metric:'pot',sup:0,all:false,q:'',sk:null,sel:null};
+let st={area:'nmwm',metric:'pot',sup:0.5,all:false,q:'',sk:null,sel:null};
 function readHash(){const h=location.hash.slice(1).split('--');
- if(h[0]&&[...sel.options].some(o=>o.value==h[0]))st.area=h[0]; st.sup=h.includes('support')?1:h.includes('half-support')?0.5:0; st.metric=h.includes('by-lc')?'lc':h.includes('by-total')?'t':'pot'}
-function writeHash(){const p=[st.area];if(st.metric=='lc')p.push('by-lc');if(st.metric=='t')p.push('by-total');if(st.sup==1)p.push('support');if(st.sup==.5)p.push('half-support');
+ if(h[0]&&[...sel.options].some(o=>o.value==h[0]))st.area=h[0]; st.sup=h.includes('support')?1:h.includes('no-support')?0:0.5; st.metric=h.includes('by-lc')?'lc':h.includes('by-total')?'t':'pot'}
+function writeHash(){const p=[st.area];if(st.metric=='lc')p.push('by-lc');if(st.metric=='t')p.push('by-total');if(st.sup==1)p.push('support');if(st.sup==0)p.push('no-support');
  const h='#'+p.join('--'); if(location.hash!=h) history.replaceState(null,'',h)}
 const val=(x,m)=>m=='pot'?(st.sup==1?x.ps:st.sup==.5?x.ph:x.p):m=='lc'?x.lc:x.t;
 const SL=()=>st.sup==1?' (full support)':st.sup==.5?' (half support)':'';
